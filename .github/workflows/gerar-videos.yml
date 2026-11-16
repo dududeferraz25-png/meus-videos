@@ -1,112 +1,27 @@
-name: Gerador Automatico de Videos
+name: Gerar e Publicar Videos
 
 on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Copiar repositorio
-        uses: actions/checkout@v3
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Instalar FFmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-
-      - name: Instalar dependencias
-        run: |
-          npm install
-
-      - name: Executar gerador
-        run: |
-          node gerar-serie.js
-
-      - name: Guardar videos gerados
-        uses: actions/upload-artifact@v3
-        with:
-          name: meus-videos-prontos
-          path: '*.mp4'
-name: Gerador Automatico de Videos
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Copiar repositorio
-        uses: actions/checkout@v3
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Instalar FFmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-
-      - name: Instalar dependencias
-        run: |
-          npm install
-
-      - name: Executar gerador
-        run: |
-          node gerar-serie.js
-
-      - name: Guardar videos gerados
-        uses: actions/upload-artifact@v3
-        with:
-          name: meus-videos-prontos
-          path: '*.mp4'
-name: Gerador Automatico de Videos
-
-on:
-  workflow_dispatch: # Permite clicar num botão no site do GitHub para rodar quando quiser
   schedule:
-    - cron: '0 0 * * *' # (Opcional) Pode rodar sozinho todos os dias, se quiser
+    - cron: '0 12 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
-  runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Copiar repositorio
-        uses: actions/checkout@v3
+      - name: Baixar o codigo
+        uses: actions/checkout@v4
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
-      - name: Instalar FFmpeg e ferramentas de audio
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          pip install edge-tts
+      - name: Instalar FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Instalar dependencias do projeto
-        run: |
-          npm install
+      - name: Instalar dependencias
+        run: npm install
 
-      - name: Executar o gerador de videos
-        run: |
-          node gerar-serie.js
-
-      - name: Guardar os videos gerados (Artifacts)
-        uses: actions/upload-artifact@v3
-        with:
-          name: meus-videos-prontos
-          path: '*.mp4'
-
+      - name: Gerar video
+        run: node index.js
