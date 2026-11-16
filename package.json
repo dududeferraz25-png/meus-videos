@@ -1,0 +1,7 @@
+{
+  "name": "meus-videos",
+  "version": "1.0.0",
+  "description": "Automacao de geracao de videos",
+  "main": "index.js",
+  "dependencies": {}
+}
